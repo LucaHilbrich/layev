@@ -1,4 +1,4 @@
-const canvas = document.getElementById('myCanvas');
+const canvas = document.getElementById('threeCanvas');
 const main = document.querySelector('main');
 
 function resizeCanvas() {
