@@ -18,7 +18,7 @@ function resizeRenderer(){
 
 // Add a cube
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const material = new THREE.MeshBasicMaterial({ color: 'rgba(88, 180, 238)' });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 

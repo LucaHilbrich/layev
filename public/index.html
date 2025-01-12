@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="styles/basic.css">
     <link rel="stylesheet" href="styles/fonts.css">
     <link rel="stylesheet" href="styles/collapsible.css">
+    <link rel="stylesheet" href="styles/dataPanel.css">
+    <link rel="stylesheet" href="styles/filterPanel.css">
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,8 +21,8 @@
     <header>
         <h1>LayEv—Synthesize and Visualize Statistical Evidence</h1>
 
-        <div class="wrap-collabsible">
-            <input id="collapsible" class="toggle" type="checkbox">
+        <div class="wrap-collapsible">
+            <input id="collapsible" class="toggle collapse-checkbox" type="checkbox">
             <label for="collapsible" class="lbl-toggle">Readme</label>
             <div class="collapsible-content">
               <section class="content-inner">
@@ -49,13 +51,45 @@ digraph Example {
     </header>
 
     <aside>
-        <section>
+        <section class="control-panel">
             <h3>Data</h3>
+            <input id="fileInput" multiple type="file" accept=".dot" />
+            <label for="fileInput" class="custom-file-input">+</label>
+            <ul id="fileList"></ul>
         </section>
 
-        <section>
+        <section class="control-panel">
             <h3>Filter</h3>
+            <div class="filter-item">
+                <label for="checkbox-r">References</label>
+                <input type="checkbox" id="checkbox-r" name="checkbox-r" checked="true" style="float:right" />
+            </div>
+            <div class="filter-item">
+                <label for="checkbox-l">Node Labels</label>
+                <input type="checkbox" id="checkbox-l" name="checkbox-m" checked="true" style="float:right" />
+            </div>
+            <div class="filter-item">
+                <label for="checkbox-sp">Significant Positive</label>
+                <input type="checkbox" id="checkbox-sp" name="checkbox-sp" checked="true" style="float:right" />
+            </div>
+            <div class="filter-item">
+                <label for="checkbox-sn">Significant Negative</label>
+                <input type="checkbox" id="checkbox-sn" name="checkbox-sn" checked="true" style="float:right" />
+            </div>
+            <div class="filter-item">
+                <label for="checkbox-s">Significant</label>
+                <input type="checkbox" id="checkbox-s" name="checkbox-s" checked="true" style="float:right" />
+            </div>
+            <div class="filter-item">
+                <label for="checkbox-a">Analyzed</label>
+                <input type="checkbox" id="checkbox-a" name="checkbox-a" style="float:right" />
+            </div>
+            <div class="filter-item">
+                <label for="checkbox-m">Measured</label>
+                <input type="checkbox" id="checkbox-m" name="checkbox-m" style="float:right" />
+            </div>
         </section>
+        
     </aside>
 
     <main>
@@ -64,6 +98,7 @@ digraph Example {
 
     <!-- Basic scripts -->
     <script src="scripts/resizeCanvas.js"></script>
+    <script src="scripts/fileInput.js"></script>
 
     <!-- Three.js scripts -->
     <script type="module" src="three-scripts/main.js"></script>

@@ -15,11 +15,11 @@ body {
 
 header {
     grid-column: 1 / -1;
-    background-color: #EEEEEE;
+    background-color: #edf9ff;
     color: #373A40;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative; /* Ensure position is relative for the pseudo-element */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    position: relative;
 }
 
 h1 {
@@ -30,7 +30,7 @@ h1 {
     margin-left: 0;
     margin-right: 0;
     font-weight: normal;
-    color: #DC5F00;
+    color: #000000;
 }
 
 h2 {
@@ -41,18 +41,17 @@ h2 {
     margin-left: 0;
     margin-right: 0;
     font-weight: normal;
-    color: #DC5F00;
+    color: #000000;
 }
 
 h3 {
     display: block;
     font-size: 1.17em;
-    margin-top: 1em;
     margin-bottom: 1em;
     margin-left: 0;
     margin-right: 0;
     font-weight: normal;
-    color: #DC5F00;
+    color: #000000;
 }
 
 p {
@@ -65,7 +64,7 @@ pre {
     background-color: #FFFFFF;
     color: #686D76;
     padding: 15px;
-    width: 260px;
+    width: 280px;
     border-radius: 5px;
     overflow-x: auto;
     line-height: 1.4;
@@ -75,6 +74,13 @@ aside {
     background-color: #FFFFFF;
     padding: 20px;
     overflow-y: auto;
+}
+
+.control-panel {
+    background-color: #edf9ff;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
 }
 
 main {

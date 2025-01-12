@@ -1,23 +1,23 @@
-.wrap-collabsible {
+.wrap-collapsible {
     margin-bottom: 1.2rem 0;
 }
 
-input[type='checkbox'] {
+.collapse-checkbox {
     display: none;
 }
 
 .lbl-toggle {
     display: block;
     padding: 1rem;
-    color: #9c2222;
-    background: #ffe0c1;
+    color: #4157a1;
+    background: #d5f5ff;
     cursor: pointer;
     border-radius: 7px;
     transition: all 0.25s ease-out;
 }
 
 .lbl-toggle:hover {
-    color: #7C5A0B;
+    color: #081b57;
 }
 
 .lbl-toggle::before {
@@ -52,7 +52,7 @@ input[type='checkbox'] {
 }
 
 .collapsible-content .content-inner {
-    background: #fff2e5;
+    background: #edf9ff;
     padding: 1rem 1rem;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
