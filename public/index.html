@@ -1,10 +1,65 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LayEv Visualizer</title>
+    <link rel="stylesheet" href="styles/basic.css">
+    <link rel="stylesheet" href="styles/fonts.css">
+    <link rel="stylesheet" href="styles/collapsible.css">
 
-<html>
-    <head>
-        <title>LayEv</title>
-    </head>
-    <body>
-        <h1>Hello, World! This is LayEv.</h1>
-    </body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body class="montserrat-regular">
+    <header>
+        <h1>LayEv—Synthesize and Visualize Statistical Evidence</h1>
+
+        <div class="wrap-collabsible">
+            <input id="collapsible" class="toggle" type="checkbox">
+            <label for="collapsible" class="lbl-toggle">Readme</label>
+            <div class="collapsible-content">
+              <section class="content-inner">
+                <p>
+                    LayEv (Layered Evidence) is an interactive visualization system to explore the
+                    results of systematic evidence synthesis. Each layer represents the found effects of
+                    an empirical study. The data is provided as graphs via .dot files, as shown below.
+                    Each digraph object has a name (e.g., authors and year of the corresponding publication)
+                    and a body specifying relationships between variables. Each line consists of two nodes
+                    named after variables ("A", "B", "C", "D" in the example below) connected by a directed edge
+                    (->) indicating causal direction. For each edge, a type is specified indicating the kind of
+                    relationship between the variables ("s+": significant positive, "s-": significant negative,
+                    "s": significant (sign unknown), "a": analyzed but not significant, "m": measured but not analyzed).
+                </p>
+                <pre class="fragment-mono-regular">
+digraph Example {
+    "B" -> "D" [type="s+"]
+    "D" -> "B" [type="s-"]
+    "C" -> "B" [type="s"]
+    "A" -> "D" [type="a"]
+    "A" -> "B" [type="m"]
+}</pre>
+              </section>
+            </div>
+          </div>
+    </header>
+
+    <aside>
+        <section>
+            <h3>Data</h3>
+        </section>
+
+        <section>
+            <h3>Filter</h3>
+        </section>
+    </aside>
+
+    <main>
+        <canvas id="myCanvas"></canvas>
+    </main>
+
+    <script src="scripts/resizeCanvas.js"></script>
+    <script src="scripts/collapsible.js"></script>
+</body>
 </html>
