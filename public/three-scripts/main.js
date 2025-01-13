@@ -8,12 +8,16 @@ renderer.setAnimationLoop(animate);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
 
-// Resizing
+// Resizing TODO: Fix canvas size bug
 window.addEventListener('resize', resizeRenderer, false);
-function resizeRenderer(){
-    camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+function resizeRenderer() {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+    const pixelRatio = window.devicePixelRatio || 1;
+    renderer.setSize(width * pixelRatio, height * pixelRatio, false);
+    renderer.setPixelRatio(pixelRatio);
 }
 
 // Add a cube
@@ -27,7 +31,7 @@ camera.position.z = 5;
 
 // Animation loop
 function animate() {
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    renderer.render(scene, camera);
 }

@@ -8,14 +8,19 @@ li {
     align-items: center;
     justify-content: space-between;
     margin-top: 4px;
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 li span {
+    display: inline-block;
     flex-grow: 1;
-    text-align: left; 
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden; 
     margin-right: 10px;
     padding: 4px;
+    max-width: 160px;
+    white-space: nowrap;
 }
 
 .deleteButton {
