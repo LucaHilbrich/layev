@@ -1,13 +1,16 @@
-import { makeVisualization } from "../three-scripts/main.js";
+import { addToVisualization, removeFromVisualization } from "../three-scripts/main.js";
 
 const fileInput = document.getElementById("fileInput");
 const fileList = document.getElementById("fileList");
-
-const fileContents = {};
+const uploadedFiles = new Set();
 
 fileInput.addEventListener("change", () => {
     for (const file of fileInput.files) {
-        processDotFile(file);
+        if (uploadedFiles.has(file.name)) {
+            alert(`The file "${file.name}" is already uploaded.`);
+        } else {
+            processDotFile(file);
+        }
     }
 });
 
@@ -24,8 +27,8 @@ function addFileToFileList(file) {
     deleteButton.className = "deleteButton";
     deleteButton.addEventListener("click", () => {
         li.remove();
-        delete fileContents[file.name];
-        makeVisualization(fileContents);
+        removeFromVisualization(file.name);
+        uploadedFiles.delete(file.name);
     });
 
     let fileName = document.createElement("span");
@@ -40,13 +43,14 @@ function addFileToFileList(file) {
     li.appendChild(fileName);
     li.appendChild(visibilityToggle);
     fileList.appendChild(li);
+
+    uploadedFiles.add(file.name);
 }
 
 function readFile(file) {
     const reader = new FileReader();
     reader.addEventListener("load", () => {
-        fileContents[file.name] = reader.result;
-        makeVisualization(fileContents);
+        addToVisualization(file.name, reader.result);
     });
 
     if (file) {
