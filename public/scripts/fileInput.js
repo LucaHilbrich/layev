@@ -1,5 +1,9 @@
+import { makeVisualization } from "../three-scripts/main.js";
+
 const fileInput = document.getElementById("fileInput");
 const fileList = document.getElementById("fileList");
+
+const fileContents = {};
 
 fileInput.addEventListener("change", () => {
     for (const file of fileInput.files) {
@@ -20,6 +24,8 @@ function addFileToFileList(file) {
     deleteButton.className = "deleteButton";
     deleteButton.addEventListener("click", () => {
         li.remove();
+        delete fileContents[file.name];
+        makeVisualization(fileContents);
     });
 
     let fileName = document.createElement("span");
@@ -39,7 +45,8 @@ function addFileToFileList(file) {
 function readFile(file) {
     const reader = new FileReader();
     reader.addEventListener("load", () => {
-        console.log(reader.result); // Init Graph object here
+        fileContents[file.name] = reader.result;
+        makeVisualization(fileContents);
     });
 
     if (file) {

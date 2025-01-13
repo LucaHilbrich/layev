@@ -29,6 +29,10 @@ scene.add(cube);
 // Position the camera
 camera.position.z = 5;
 
+export function makeVisualization(dotFiles) {
+    console.log(dotFiles);
+}
+
 // Animation loop
 function animate() {
     cube.rotation.x += 0.01;
