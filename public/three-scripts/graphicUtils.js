@@ -40,10 +40,6 @@ export function makeTexture(edges) {
     return texture;
 }
 
-export function updateTexture() {
-
-}
-
 function drawGradientEdge(context, x1, y1, x2, y2, edgeType, lineWidth) {
     const gradient = context.createLinearGradient(x1, y1, x2, y2);
     gradient.addColorStop(0, CONFIG.COLORS['m']);
@@ -55,4 +51,9 @@ function drawGradientEdge(context, x1, y1, x2, y2, edgeType, lineWidth) {
     context.moveTo(x1, y1);
     context.lineTo(x2, y2);
     context.stroke();
+}
+
+export function setAlpha(colorString, alpha) {
+    const updatedColor = colorString.replace(/rgba\(([\d\s,]+),\s*\d*\.?\d*\)/, `rgba($1, ${alpha})`); 
+    return updatedColor;
 }

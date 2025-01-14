@@ -1,5 +1,5 @@
 import { CONFIG, getScene, getRenderer } from "./main.js";
-import { makePlane, makeTexture, updateTexture } from "./graphicUtils.js";
+import { makePlane, makeTexture } from "./graphicUtils.js";
 
 export let layers = {};
 
@@ -22,6 +22,11 @@ export class Layer {
 
     updatePosition(index) {
         this.plane.position.set(0, index * CONFIG.LAYER_DISTANCE - (Object.keys(layers).length * CONFIG.LAYER_DISTANCE / 2), 0);
+    }
+
+    updateTexture() {
+        this.plane.material.map = makeTexture(this.edges);
+        // this.plane.material.needsUpdate = true;
     }
 
     removeLayer() {

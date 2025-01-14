@@ -4,18 +4,18 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/js
 import { Layer, layers } from './Layer.js';
 
 // Configuration parameters
-export const CONFIG = {
+export let CONFIG = {
     'LAYER_WIDTH': 1,
     'LAYER_HEIGHT': 0.5,
     'LAYER_DISTANCE': 0.2,
     'TEXTURE_RES': 1024,
-    'TEXTURE_FILL': 'rgba(30, 30, 30, 0.02)',
+    'TEXTURE_FILL': 'rgba(30, 30, 30, 0.05)',
     'COLORS': {
-        'sp': 'rgba(171, 206, 48)',
-        'sn': 'rgba(250, 26, 13)',
-        's': 'rgba(88, 180, 238)',
-        'a': 'rgba(255, 255, 255, 0.5)',
-        'm': 'rgba(120, 120, 120, 0.5)'
+        'sp': 'rgba(171, 206, 48, 1.0)',
+        'sn': 'rgba(250, 26, 13, 1.0)',
+        's': 'rgba(88, 180, 238, 1.0)',
+        'a': 'rgba(255, 255, 255, 1.0)',
+        'm': 'rgba(120, 120, 120, 1.0)'
     }
 }
 
@@ -37,7 +37,9 @@ export function getScene() {
 const WIDTH = window.innerWidth / 500;
 const HEIGHT = window.innerHeight / 500;
 const camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 1000 );
-camera.position.z = 2;
+camera.position.set(1, 0.7, 2);
+camera.zoom = 2;
+camera.updateProjectionMatrix();
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.maxPolarAngle = Math.PI * 0.5;
@@ -62,19 +64,25 @@ export function addToVisualization(dotName, dotFile) {
     l.createLayer();
 
     layers[dotName] = l;
-    updateLayers();
+    updateLayerPositions();
 }
 
 // Triggered when .dot file is deleted
 export function removeFromVisualization(dotName) {
     layers[dotName].removeLayer();
     delete layers[dotName];
-    updateLayers();
+    updateLayerPositions();
 }
 
-function updateLayers() {
+export function updateLayerPositions() {
     for (const [index, [name, layer]] of Object.entries(Object.entries(layers))) {
         layer.updatePosition(index);
+    }
+}
+
+export function updateLayerTextures() {
+    for (const [index, [name, layer]] of Object.entries(Object.entries(layers))) {
+        layer.updateTexture();
     }
 }
 
