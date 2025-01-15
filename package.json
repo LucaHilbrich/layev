@@ -1,14 +1,23 @@
 {
   "name": "layev",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "start": "serve -s dist",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "serve -s build",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.0.5"
+  },
   "dependencies": {
-    "express": "^4.21.2"
+    "cytoscape": "^3.31.0",
+    "cytoscape-fcose": "^2.2.0",
+    "express": "^4.21.2",
+    "serve": "^14.2.4",
+    "three": "^0.172.0"
   }
 }
