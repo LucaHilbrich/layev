@@ -1,5 +1,5 @@
 import { CONFIG, getScene } from "./main.js";
-import { makePlane, makeTexture } from "./graphicUtils.js";
+import { makePlane, makeTexture, makeReferenceText, makeLabelText } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
 
 export class LayeredGraph {
@@ -57,11 +57,18 @@ class Layer {
         this.plane.material.map = this.texture;
         this.plane.material.transparent = true;
         this.plane.material.needsUpdate = true;
+        this.referenceText = makeReferenceText(this.name, this.plane.position);
         getScene().add(this.plane);
+        getScene().add(this.referenceText);
     }
 
     updatePosition(index, nLayers) {
         this.plane.position.set(0, index * CONFIG.LAYER_DISTANCE - (nLayers * CONFIG.LAYER_DISTANCE / 2), 0);
+        this.referenceText.position.set(
+            this.plane.position.x - CONFIG.LAYER_WIDTH/2,
+            this.plane.position.y,
+            this.plane.position.z - CONFIG.LAYER_HEIGHT/2
+        );
     }
 
     updateTexture() {
