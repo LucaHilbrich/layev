@@ -1,7 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.module.js';
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
 
-import { Layer, layers } from './Layer.js';
+import { LayeredGraph } from './LayeredGraph.js';
 
 // Configuration parameters
 export let CONFIG = {
@@ -58,32 +58,17 @@ function resizeRenderer() {
     renderer.setPixelRatio(pixelRatio);
 }
 
+// Initialize layered graph
+export const layeredGraph = new LayeredGraph();
+
 // Triggered when .dot file is uploaded
 export function addToVisualization(dotName, dotFile) {
-    const l = new Layer(dotFile);
-    l.createLayer();
-
-    layers[dotName] = l;
-    updateLayerPositions();
+    layeredGraph.addLayer(dotName, dotFile);
 }
 
 // Triggered when .dot file is deleted
 export function removeFromVisualization(dotName) {
-    layers[dotName].removeLayer();
-    delete layers[dotName];
-    updateLayerPositions();
-}
-
-export function updateLayerPositions() {
-    for (const [index, [name, layer]] of Object.entries(Object.entries(layers))) {
-        layer.updatePosition(index);
-    }
-}
-
-export function updateLayerTextures() {
-    for (const [index, [name, layer]] of Object.entries(Object.entries(layers))) {
-        layer.updateTexture();
-    }
+    layeredGraph.removeLayer(dotName);
 }
 
 // Animation loop

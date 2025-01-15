@@ -1,14 +1,43 @@
-import { CONFIG, getScene, getRenderer } from "./main.js";
+import { CONFIG, getScene } from "./main.js";
 import { makePlane, makeTexture } from "./graphicUtils.js";
 
-export let layers = {};
+export class LayeredGraph {
+    constructor() {
+        this.layers = {};
+    }
 
-export class Layer {
+    addLayer(dotName, dotFile) {
+        this.layers[dotName] = new Layer(dotFile);
+        this.updateLayerPositions();
+    }
+
+    updateLayerPositions() {
+        const nLayers = Object.keys(this.layers).length;
+        for (const [index, [name, layer]] of Object.entries(Object.entries(this.layers))) {
+            layer.updatePosition(index, nLayers);
+        }
+    }
+
+    updateLayerTextures() {
+        for (const [index, [name, layer]] of Object.entries(Object.entries(this.layers))) {
+            layer.updateTexture();
+        }
+    }
+
+    removeLayer(dotName) {
+        this.layers[dotName].removeLayer();
+        delete this.layers[dotName];
+        this.updateLayerPositions();
+    }
+}
+
+class Layer {
     constructor(dotFile) {
         const dotContents = parseDot(dotFile);
         this.name = dotContents.name;
         this.nodes = dotContents.nodes;
         this.edges = dotContents.edges;
+        this.createLayer();
     }
 
     createLayer() {
@@ -20,8 +49,8 @@ export class Layer {
         getScene().add(this.plane);
     }
 
-    updatePosition(index) {
-        this.plane.position.set(0, index * CONFIG.LAYER_DISTANCE - (Object.keys(layers).length * CONFIG.LAYER_DISTANCE / 2), 0);
+    updatePosition(index, nLayers) {
+        this.plane.position.set(0, index * CONFIG.LAYER_DISTANCE - (nLayers * CONFIG.LAYER_DISTANCE / 2), 0);
     }
 
     updateTexture() {

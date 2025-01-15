@@ -1,6 +1,6 @@
 import { setAlpha } from '../three-scripts/graphicUtils.js'
 import { CONFIG } from '../three-scripts/main.js';
-import { updateLayerTextures } from '../three-scripts/main.js';
+import { layeredGraph } from '../three-scripts/main.js';
 
 const checkboxReferences = document.getElementById('checkbox-r');
 const checkboxNodeLabels = document.getElementById('checkbox-l');
@@ -32,7 +32,7 @@ checkboxSignificantPositive.addEventListener('change', function() {
     } else {
         CONFIG.COLORS.sp = setAlpha(CONFIG.COLORS.sp, 0.0);
     }
-    updateLayerTextures();
+    layeredGraph.updateLayerTextures();
 });
 
 checkboxSignificantNegative.addEventListener('change', function() {
@@ -41,7 +41,7 @@ checkboxSignificantNegative.addEventListener('change', function() {
     } else {
         CONFIG.COLORS.sn = setAlpha(CONFIG.COLORS.sn, 0.0);
     }
-    updateLayerTextures();
+    layeredGraph.updateLayerTextures();
 });
 
 checkboxSignificant.addEventListener('change', function() {
@@ -50,7 +50,7 @@ checkboxSignificant.addEventListener('change', function() {
     } else {
         CONFIG.COLORS.s = setAlpha(CONFIG.COLORS.s, 0.0);
     }
-    updateLayerTextures();
+    layeredGraph.updateLayerTextures();
 });
 
 checkboxAnalyzed.addEventListener('change', function() {
@@ -59,7 +59,7 @@ checkboxAnalyzed.addEventListener('change', function() {
     } else {
         CONFIG.COLORS.a = setAlpha(CONFIG.COLORS.a, 0.0);
     }
-    updateLayerTextures();
+    layeredGraph.updateLayerTextures();
 });
 
 checkboxMeasured.addEventListener('change', function() {
@@ -68,5 +68,5 @@ checkboxMeasured.addEventListener('change', function() {
     } else {
         CONFIG.COLORS.m = setAlpha(CONFIG.COLORS.m, 0.0);
     }
-    updateLayerTextures();
+    layeredGraph.updateLayerTextures();
 });
