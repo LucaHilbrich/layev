@@ -1,0 +1,65 @@
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 0.8em;
+}
+
+li span {
+    display: inline-block;
+    flex-grow: 1;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    margin-right: 10px;
+    padding: 4px;
+    max-width: 160px;
+    white-space: nowrap;
+}
+
+.deleteButton {
+    background-color: rgba(250, 26, 13);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+    width: 30px;
+}
+
+.custom-file-input {
+    background-color: rgba(171, 206, 48);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+    width: 30px;
+}
+
+.deleteButton:hover {
+    background-color: #d53f3f;
+}
+
+.custom-file-input:hover {
+    background-color: #388E3C;
+}
+
+.custom-file-input {
+    display: inline-block;
+    text-align: center;
+}
+
+input[type="file"] {
+    display: none;
+}
