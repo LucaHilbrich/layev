@@ -1,0 +1,7 @@
+digraph Example {
+    "B" -> "D" [type="sp"]
+    "D" -> "B" [type="sn"]
+    "C" -> "B" [type="s"]
+    "A" -> "D" [type="a"]
+    "A" -> "B" [type="m"]
+}
