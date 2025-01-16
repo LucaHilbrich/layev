@@ -34,7 +34,7 @@ export function makeTexture(nodes, edges) {
         let p2 = nodes.find(x => x.id === e.dst);
         let x2 = p2['x'] * canvas.width;
         let y2 = p2['y'] * canvas.height;
-        drawGradientEdge(context, x1, y1, x2, y2, e['type'], 8);
+        drawGradientEdge(context, x1, y1, x2, y2, e['type'], CONFIG.EDGE_WIDTH);
     }
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -58,47 +58,76 @@ function drawGradientEdge(context, x1, y1, x2, y2, edgeType, lineWidth) {
     context.stroke();
 }
 
-export function makeLabelText(text, pos) {
-    return makeText(48, 'center', 'center', text, pos.x, pos.y, pos.z);
+export function makeLabelText(text) {
+    return makeText(8, 'center', 'center', text, 0, 0, 0);
 }
 
 export function makeReferenceText(text) {
-    return makeText(64, 'left', 'center', text, 0, 0, 0);
+    return makeText(16, 'left', 'center', text, 0, 0, 0);
 }
 
 function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
+    // Super-sampling factor (increase for higher resolution)
+    const resolutionFactor = 4;
+
     // Create a canvas to draw the text
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
-    // Set canvas size and background
-    canvas.width = 1024;
-    canvas.height = 128;
-    context.fillStyle = 'rgba(255, 255, 255, 0)';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.font = `${fontSize}px Tahoma`;
-    context.fillStyle = 'black';
+    // Set the font for measuring text
+    const scaledFontSize = fontSize * resolutionFactor;
+    context.font = `${scaledFontSize}px Montserrat`;
+
+    // Measure the text dimensions
+    const textWidth = context.measureText(text).width;
+    const textHeight = scaledFontSize * 1.2; // Approximate text height
+
+    // Adjust canvas size for high resolution
+    canvas.width = Math.ceil(textWidth);
+    canvas.height = Math.ceil(textHeight);
+
+    // Reapply font and styles after resizing the canvas
+    context.font = `${scaledFontSize}px Montserrat`;
     context.textAlign = textAlign;
     context.textBaseline = textBaseline;
-    context.fillText(text, canvas.width / 2, canvas.height / 2);
 
-    // Create a texture from the canvas
+    // Optionally fill the background for debugging
+    context.fillStyle = 'rgba(255, 0, 0, 0)';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the text
+    context.fillStyle = 'black';
+    const xOffset = textAlign === 'center' ? canvas.width / 2 : textAlign === 'right' ? canvas.width : 0;
+    const yOffset = textBaseline === 'middle' ? canvas.height / 2 : textBaseline === 'bottom' ? canvas.height : scaledFontSize;
+    context.fillText(text, xOffset, yOffset);
+
+    // Create a texture from the high-resolution canvas
     const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
-    
-    // Create a flat plane geometry
-    const geometry = new THREE.PlaneGeometry(0.4, 0.05);
-    const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide, alphaTest: 0.5 });
+    texture.anisotropy = getRenderer().capabilities.getMaxAnisotropy();
+
+    // Downscale the plane geometry to match the original font size
+    const geometry = new THREE.PlaneGeometry(
+        (canvas.width / resolutionFactor) / 500, // Scale appropriately
+        (canvas.height / resolutionFactor) / 500
+    );
+
+    const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        side: THREE.DoubleSide,
+        alphaTest: 0.5
+    });
+
+    // Create the mesh
     const textMesh = new THREE.Mesh(geometry, material);
 
-    // Render always on top
+    // Ensure it renders always on top
     textMesh.renderOrder = 999;
     textMesh.material.depthTest = false;
     textMesh.material.depthWrite = false;
     textMesh.onBeforeRender = function (renderer) { renderer.clearDepth(); };
-    
-    // Rotate the text 90 degrees around the Z-axis
-    // textMesh.rotation.z = Math.PI / 2;
 
     // Position the text mesh
     textMesh.position.set(x, y, z);

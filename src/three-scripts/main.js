@@ -10,6 +10,7 @@ export let CONFIG = {
     'TEXTURE_RES': 1024,
     'TEXTURE_FILL': 'rgba(30, 30, 30, 0.05)',
     'NODE_PADDING': 20,
+    'EDGE_WIDTH': 4,
     'COLORS': {
         'sp': 'rgba(171, 206, 48, 1.0)',
         'sn': 'rgba(250, 26, 13, 1.0)',
@@ -40,6 +41,9 @@ const camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2,
 camera.position.set(1, 0.7, 2);
 camera.zoom = 1.5;
 camera.updateProjectionMatrix();
+export function getCamera() {
+	return camera;
+}
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.maxPolarAngle = Math.PI * 0.5;
@@ -82,5 +86,6 @@ export function removeFromVisualization(dotName) {
 // Animation loop
 function animate() {
     // resizeRenderer();
+    layeredGraph.updateLayerLabels();
     renderer.render(scene, camera);
 }

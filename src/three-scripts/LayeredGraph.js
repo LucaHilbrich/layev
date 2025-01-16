@@ -1,4 +1,4 @@
-import { CONFIG, getScene } from "./main.js";
+import { CONFIG, getScene, getCamera } from "./main.js";
 import { makePlane, makeTexture, makeReferenceText, makeLabelText } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
 
@@ -19,14 +19,20 @@ export class LayeredGraph {
         for (const [index, [name, layer]] of Object.entries(Object.entries(this.layers))) {
             layer.updatePosition(index, nLayers);
         }
-        console.log('Updated positions.');
+        // console.log('Updated positions.');
     }
 
     updateLayerTextures() {
         for (const [name, layer] of Object.entries(this.layers)) {
             layer.updateTexture();
         }
-        console.log('Updated textures.');
+        // console.log('Updated textures.');
+    }
+
+    updateLayerLabels() {
+        for (const [name, layer] of Object.entries(this.layers)) {
+            layer.updateLabels();
+        }
     }
 
     removeLayer(dotName) {
@@ -57,9 +63,16 @@ class Layer {
         this.plane.material.map = this.texture;
         this.plane.material.transparent = true;
         this.plane.material.needsUpdate = true;
-        this.referenceText = makeReferenceText(this.name, this.plane.position);
+        this.referenceText = makeReferenceText(this.name);
+        this.labelTexts = {};
+        for (const n of this.nodes) {
+            this.labelTexts[n.id] = makeLabelText(n.id);
+        }
         getScene().add(this.plane);
         getScene().add(this.referenceText);
+        for (const [_, l] of Object.entries(this.labelTexts)) {
+            getScene().add(l);
+        }
     }
 
     updatePosition(index, nLayers) {
@@ -69,6 +82,13 @@ class Layer {
             this.plane.position.y,
             this.plane.position.z - CONFIG.LAYER_HEIGHT/2
         );
+        for (const n of this.nodes) {
+            this.labelTexts[n.id].position.set(
+                n.x * CONFIG.LAYER_WIDTH - CONFIG.LAYER_WIDTH/2,
+                this.plane.position.y,
+                (1 - n.y) * CONFIG.LAYER_HEIGHT - CONFIG.LAYER_HEIGHT/2
+            );
+        }
     }
 
     updateTexture() {
@@ -76,14 +96,27 @@ class Layer {
         // this.plane.material.needsUpdate = true;
     }
 
+    updateLabels() {
+        // Face camera
+        for (const [_, l] of Object.entries(this.labelTexts)) {
+			l.quaternion.copy(getCamera().quaternion);
+        }
+
+        // Prevent overlaps
+	}
+
     removeLayer() {
         getScene().remove(this.plane);
+        getScene().remove(this.referenceText);
+        for (const [_, l] of Object.entries(this.labelTexts)) {
+            getScene().remove(l);
+        }
     }
 }
 
 function parseDot(dotFile) {
     const graphNameRegex = /digraph\s+([\w-]+)\s*\{/;
-    const edgeRegex = /"(\w+)"\s*->\s*"(\w+)"\s*\[type="(\w+)"\]/g;
+    const edgeRegex = /"([^"]+)"\s*->\s*"([^"]+)"\s*\[type="([^"]+)"\]/g;
 
     const graphNameMatch = dotFile.match(graphNameRegex);
     const graphName = graphNameMatch ? graphNameMatch[1] : null;

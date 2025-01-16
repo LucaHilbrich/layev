@@ -38,6 +38,13 @@ export async function applyFcose(layers) {
     let normalizedPositions;
     cy.layout({
         name: 'fcose',
+        nodeRepulsion: 10000,
+        edgeElasticity: 0.5,
+        
+        // idealEdgeLength: function (edge) {
+        //     return edge.data().weight * 400;
+        // },
+        
         ready: () => {
             let nodePositions = cy.nodes().map(node => node.position());
 
