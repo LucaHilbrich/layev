@@ -1,0 +1,14 @@
+digraph Milleville-Pennel_Charron_2015 {
+"Presence" -> "Cybersickness" [type="sn"]
+"Cybersickness" -> "Presence" [type="sn"]
+"Gender" -> "Cybersickness" [type="a"]
+"Age" -> "Cybersickness" [type="a"]
+"Gender" -> "Presence" [type="a"]
+"Age" -> "Presence" [type="a"]
+"Task Load" -> "Cybersickness" [type="a"]
+"Cybersickness" -> "Task Load" [type="a"]
+"Task Load" -> "Presence" [type="a"]
+"Presence" -> "Task Load" [type="a"]
+"Gender" -> "Task Load" [type="a"]
+"Age" -> "Task Load" [type="a"]
+}

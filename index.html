@@ -55,7 +55,8 @@ digraph Example {
         <section class="control-panel">
             <h3>Data</h3>
             <input id="fileInput" multiple type="file" accept=".dot" />
-            <label for="fileInput" class="custom-file-input">+</label>
+            <label for="fileInput" class="uploadButton">+</label>
+            <button id="loadExample" class="loadExampleButton" type="button">Load example</button>
             <ul id="fileList"></ul>
         </section>
 
@@ -95,7 +96,6 @@ digraph Example {
     <main id="renderSpace"></main>
 
     <!-- Basic scripts -->
-    <script src="src/scripts/resizeCanvas.js"></script>
     <script type="module" src="src/scripts/fileInput.js"></script>
     <script type="module" src="src/scripts/filter.js"></script>
 

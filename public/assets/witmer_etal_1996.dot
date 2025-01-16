@@ -1,0 +1,18 @@
+digraph Witmer_etal_1996 {
+"Presence" -> "Cybersickness" [type="sn"]
+"Cybersickness" -> "Presence" [type="sn"]
+"Gender" -> "Cybersickness" [type="a"]
+"Gender" -> "Presence" [type="m"]
+"Memory" -> "Cybersickness" [type="a"]
+"Cybersickness" -> "Memory" [type="a"]
+"Memory" -> "Presence" [type="a"]
+"Presence" -> "Memory" [type="a"]
+"Spatial Ability" -> "Presence" [type="a"]
+"Gender" -> "Spatial Ability" [type="s"]
+"Presence" -> "Spatial Ability" [type="a"]
+"Cybersickness" -> "Spatial Ability" [type="a"]
+"Spatial Ability" -> "Cybersickness" [type="a"]
+"Memory" -> "Spatial Ability" [type="s"]
+"Spatial Ability" -> "Memory" [type="m"]
+"Gender" -> "Memory" [type="s"]
+}

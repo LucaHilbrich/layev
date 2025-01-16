@@ -1,0 +1,14 @@
+digraph Cooper_etal_2015 {
+"Presence" -> "Cybersickness" [type="sn"]
+"Cybersickness" -> "Presence" [type="sn"]
+"Presence" -> "Task Performance" [type="sp"]
+"Task Performance" -> "Presence" [type="sp"]
+"Cybersickness" -> "Task Performance" [type="m"]
+"Task Performance" -> "Cybersickness" [type="m"]
+"Sensory Breadth" -> "Presence" [type="m"]
+"Sensory Breadth" -> "Cybersickness" [type="m"]
+"Sensory Breadth" -> "Task Performance" [type="sp"]
+"Immersive Tendencies" -> "Presence" [type="m"]
+"Immersive Tendencies" -> "Cybersickness" [type="m"]
+"Immersive Tendencies" -> "Task Performance" [type="m"]
+}

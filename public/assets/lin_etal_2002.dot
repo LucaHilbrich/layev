@@ -1,0 +1,18 @@
+digraph Lin_etal_2002 {
+"Presence" -> "Cybersickness" [type="sp"]
+"Cybersickness" -> "Presence" [type="sp"]
+"Enjoyment" -> "Cybersickness" [type="sn"]
+"Cybersickness" -> "Enjoyment" [type="sn"]
+"Presence" -> "Enjoyment" [type="a"]
+"Enjoyment" -> "Presence" [type="a"]
+"Memory" -> "Cybersickness" [type="a"]
+"Cybersickness" -> "Memory" [type="a"]
+"Memory" -> "Presence" [type="sp"]
+"Presence" -> "Memory" [type="sp"]
+"Memory" -> "Enjoyment" [type="a"]
+"Enjoyment" -> "Memory" [type="a"]
+"FOV" -> "Cybersickness" [type="sp"]
+"FOV" -> "Presence" [type="sp"]
+"FOV" -> "Enjoyment" [type="a"]
+"FOV" -> "Memory" [type="sp"]
+}

@@ -23,6 +23,19 @@ li span {
     white-space: nowrap;
 }
 
+.uploadButton {
+    background-color: rgba(171, 206, 48);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+    width: 30px;
+    display: inline-block;
+}
+
 .deleteButton {
     background-color: rgba(250, 26, 13);
     color: white;
@@ -35,7 +48,7 @@ li span {
     width: 30px;
 }
 
-.custom-file-input {
+.loadExampleButton {
     background-color: rgba(171, 206, 48);
     color: white;
     border: none;
@@ -44,20 +57,20 @@ li span {
     cursor: pointer;
     font-size: 0.9rem;
     text-align: center;
-    width: 30px;
+    width: 140px;
+    float: right;
 }
 
 .deleteButton:hover {
     background-color: #d53f3f;
 }
 
-.custom-file-input:hover {
+.uploadButton:hover {
     background-color: #388E3C;
 }
 
-.custom-file-input {
-    display: inline-block;
-    text-align: center;
+.loadExampleButton:hover {
+    background-color: #388E3C;
 }
 
 input[type="file"] {

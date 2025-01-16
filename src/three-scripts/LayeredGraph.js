@@ -82,7 +82,7 @@ class Layer {
 }
 
 function parseDot(dotFile) {
-    const graphNameRegex = /digraph\s+(\w+)\s*\{/;
+    const graphNameRegex = /digraph\s+([\w-]+)\s*\{/;
     const edgeRegex = /"(\w+)"\s*->\s*"(\w+)"\s*\[type="(\w+)"\]/g;
 
     const graphNameMatch = dotFile.match(graphNameRegex);

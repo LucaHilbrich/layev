@@ -1,0 +1,6 @@
+digraph Schematic_B {
+"B" -> "D" [type="s"]
+"D" -> "B" [type="s"]
+"C" -> "B" [type="sp"]
+"C" -> "D" [type="sp"]
+}

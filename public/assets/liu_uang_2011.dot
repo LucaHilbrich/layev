@@ -1,0 +1,8 @@
+digraph Liu_Uang_2011 {
+"Presence" -> "Cybersickness" [type="sp"]
+"Cybersickness" -> "Presence" [type="sp"]
+"Sensory Depth" -> "Cybersickness" [type="sp"]
+"Sensory Depth" -> "Presence" [type="sp"]
+"Display Quality" -> "Cybersickness" [type="sp"]
+"Display Quality" -> "Presence" [type="sp"]
+}

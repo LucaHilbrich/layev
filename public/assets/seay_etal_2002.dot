@@ -1,0 +1,13 @@
+digraph Seay_etal_2002 {
+"Presence" -> "Cybersickness" [type="a"]
+"Cybersickness" -> "Presence" [type="a"]
+"Immersive Tendencies" -> "Presence" [type="a"]
+"Immersive Tendencies" -> "Cybersickness" [type="a"]
+"FOV" -> "Cybersickness" [type="a"]
+"FOV" -> "Presence" [type="m"]
+"FOV" -> "Presence" [type="sp"]
+"Display Quality" -> "Cybersickness" [type="a"]
+"Display Quality" -> "Presence" [type="m"]
+"Control" -> "Presence" [type="sp"]
+"Control" -> "Cybersickness" [type="a"]
+}

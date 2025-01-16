@@ -1,0 +1,8 @@
+digraph Nichols_etal_2000 {
+"Presence" -> "Cybersickness" [type="sn"]
+"Cybersickness" -> "Presence" [type="sn"]
+"Enjoyment" -> "Cybersickness" [type="a"]
+"Cybersickness" -> "Enjoyment" [type="a"]
+"Presence" -> "Enjoyment" [type="sp"]
+"Enjoyment" -> "Presence" [type="sp"]
+}

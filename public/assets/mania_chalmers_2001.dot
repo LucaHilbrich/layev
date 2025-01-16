@@ -1,0 +1,6 @@
+digraph Mania_Chalmers_2001 {
+"Presence" -> "Cybersickness" [type="a"]
+"Cybersickness" -> "Presence" [type="a"]
+"Cybersickness" -> "Memory" [type="m"]
+"Presence" -> "Memory" [type="m"]
+}
