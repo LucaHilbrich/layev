@@ -134,3 +134,30 @@ export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
 
     return textMesh;
 }
+
+export function createDot() {
+    const points = [new THREE.Vector3(0, 0, 0)];
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.PointsMaterial({
+        color: '#000000',
+        size: 5,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false,
+    });
+    const dot = new THREE.Points(geometry, material);
+    dot.renderOrder = Infinity;
+    return dot;
+}
+
+// export function createLine(nodeX, nodeY, shape1Y, shape2Y) {
+//     const [x, y] = worldCoordsFromTextureCoords(nodeX, nodeY);
+//     const points = [
+//         new THREE.Vector3(x, shape1Y, y),
+//         new THREE.Vector3(x, shape2Y, y)
+//     ];
+//     const geometry = new THREE.BufferGeometry().setFromPoints(points);
+//     const material = new THREE.LineBasicMaterial({ color: 'rgba(0, 0, 0)' });
+//     const line = new THREE.Line(geometry, material);
+//     return line;
+// }

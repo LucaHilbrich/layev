@@ -62,12 +62,14 @@ function readFile(file) {
 
 document.getElementById("loadExample").addEventListener("click", async () => {
     const filePaths = [
-        // '../assets/schematic_a.dot',
+        '../assets/schematic_a.dot',
+        '../assets/schematic_b.dot',
+        '../assets/schematic_c.dot',
 
-        '../assets/bangay_preston_1998.dot',
-        '../assets/busscher_etal_2011.dot',
-        '../assets/cooper_etal_2015.dot',
-        '../assets/kim_etal_2005.dot',
+        // '../assets/bangay_preston_1998.dot',
+        // '../assets/busscher_etal_2011.dot',
+        // '../assets/cooper_etal_2015.dot',
+        // '../assets/kim_etal_2005.dot',
         // '../assets/knight_arns_2006.dot',
         // '../assets/lin_etal_2002.dot',
         // '../assets/ling_etal_2013.dot',

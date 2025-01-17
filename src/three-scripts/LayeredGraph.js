@@ -1,5 +1,5 @@
 import { CONFIG, getScene, getCamera } from "./main.js";
-import { makePlane, makeTexture, makeReferenceText, makeLabelText } from "./graphicUtils.js";
+import { makePlane, makeTexture, makeReferenceText, createDot } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
 import { Label } from "./Label.js";
 
@@ -69,10 +69,15 @@ class Layer {
         for (const n of this.nodes) {
             this.labelTexts[n.id] = new Label(n.id);
         }
+        this.nodePoints = {};
+        for (const n of this.nodes) {
+            this.nodePoints[n.id] = createDot();
+        }
         getScene().add(this.plane);
         getScene().add(this.referenceText);
-        for (const [_, l] of Object.entries(this.labelTexts)) {
-            getScene().add(l.getTextMesh());
+        for (const n of this.nodes) {
+            getScene().add(this.labelTexts[n.id].getTextMesh());
+            getScene().add(this.nodePoints[n.id]);
         }
     }
 
@@ -84,11 +89,9 @@ class Layer {
             this.plane.position.z - CONFIG.LAYER_HEIGHT/2
         );
         for (const n of this.nodes) {
-            this.labelTexts[n.id].setPosInit(
-                n.x * CONFIG.LAYER_WIDTH - CONFIG.LAYER_WIDTH/2,
-                this.plane.position.y,
-                (1 - n.y) * CONFIG.LAYER_HEIGHT - CONFIG.LAYER_HEIGHT/2
-            );
+            const [x, y] = worldCoordsFromTextureCoords(n.x, n.y);
+            this.labelTexts[n.id].setPosInit(x, this.plane.position.y, y);
+            this.nodePoints[n.id].position.set(x, this.plane.position.y, y);
         }
     }
 
@@ -157,4 +160,8 @@ function parseDot(dotFile) {
         nodes,
         edges,
     };
+}
+
+function worldCoordsFromTextureCoords(textureX, textureY) {
+    return [textureX * CONFIG.LAYER_WIDTH - (CONFIG.LAYER_WIDTH/2), (1 - textureY) * CONFIG.LAYER_HEIGHT - (CONFIG.LAYER_HEIGHT/2)];
 }
