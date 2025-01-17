@@ -1,11 +1,12 @@
+import * as THREE from 'three'; 
 import { CONFIG, getScene, getCamera } from "./main.js";
-import { makePlane, makeTexture, makeReferenceText, createDot } from "./graphicUtils.js";
+import { makePlane, makeTexture, makeReferenceText, createDot, createLine } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
 import { Label } from "./Label.js";
 
 export class LayeredGraph {
     constructor() {
-        this.layers = {};
+        this.layers = new Map();
     }
 
     addLayer(dotName, dotFile) {
@@ -19,7 +20,9 @@ export class LayeredGraph {
         const nLayers = Object.keys(this.layers).length;
         for (const [index, [name, layer]] of Object.entries(Object.entries(this.layers))) {
             layer.updatePosition(index, nLayers);
+            layer.removeNodeLines();
         }
+        this.addNodeLines();
         // console.log('Updated positions.');
     }
 
@@ -33,6 +36,20 @@ export class LayeredGraph {
     updateLayerLabels() {
         for (const [name, layer] of Object.entries(this.layers)) {
             layer.updateLabels();
+        }
+    }
+
+    addNodeLines() {
+        const layerKeys = Object.keys(this.layers); // Get the keys of the layers object
+        for (let i = 0; i < layerKeys.length - 1; i++) {
+            const currentLayer = this.layers[layerKeys[i]];
+            const nextLayer = this.layers[layerKeys[i + 1]];
+
+            for (const node of currentLayer.nodes) {
+                if (nextLayer.nodes.some(obj => obj.id === node.id)) {
+                    currentLayer.createNodeLine(node.id);
+                }
+            }
         }
     }
 
@@ -66,11 +83,10 @@ class Layer {
         this.plane.material.needsUpdate = true;
         this.referenceText = makeReferenceText(this.name);
         this.labelTexts = {};
+        this.nodePoints = {};
+        this.nodeLines = {};
         for (const n of this.nodes) {
             this.labelTexts[n.id] = new Label(n.id);
-        }
-        this.nodePoints = {};
-        for (const n of this.nodes) {
             this.nodePoints[n.id] = createDot();
         }
         getScene().add(this.plane);
@@ -78,6 +94,19 @@ class Layer {
         for (const n of this.nodes) {
             getScene().add(this.labelTexts[n.id].getTextMesh());
             getScene().add(this.nodePoints[n.id]);
+        }
+    }
+
+    createNodeLine(nodeId) {
+        const n = this.nodes.find(x => x.id === nodeId);
+        const [x, y] = worldCoordsFromTextureCoords(n.x, n.y);
+        this.nodeLines[n.id] = createLine(x, this.plane.position.y, y, CONFIG.LAYER_DISTANCE);
+        getScene().add(this.nodeLines[n.id]);
+    }
+
+    removeNodeLines() {
+        for (const [name, nodeLine] of Object.entries(this.nodeLines)) {
+            getScene().remove(nodeLine);
         }
     }
 
@@ -116,8 +145,12 @@ class Layer {
     removeLayer() {
         getScene().remove(this.plane);
         getScene().remove(this.referenceText);
-        for (const [_, l] of Object.entries(this.labelTexts)) {
-            getScene().remove(l.getTextMesh());
+        for (const n of this.nodes) {
+            getScene().remove(this.labelTexts[n.id].getTextMesh());
+            getScene().remove(this.nodePoints[n.id]);
+        }
+        for (const [name, nodeLine] of Object.entries(this.nodeLines)) {
+            getScene().remove(nodeLine);
         }
     }
 }

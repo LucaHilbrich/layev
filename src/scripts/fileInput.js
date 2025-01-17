@@ -62,27 +62,27 @@ function readFile(file) {
 
 document.getElementById("loadExample").addEventListener("click", async () => {
     const filePaths = [
-        '../assets/schematic_a.dot',
-        '../assets/schematic_b.dot',
-        '../assets/schematic_c.dot',
+        // '../assets/schematic_a.dot',
+        // '../assets/schematic_b.dot',
+        // '../assets/schematic_c.dot',
 
-        // '../assets/bangay_preston_1998.dot',
-        // '../assets/busscher_etal_2011.dot',
-        // '../assets/cooper_etal_2015.dot',
-        // '../assets/kim_etal_2005.dot',
-        // '../assets/knight_arns_2006.dot',
-        // '../assets/lin_etal_2002.dot',
-        // '../assets/ling_etal_2013.dot',
-        // '../assets/liu_uang_2011.dot',
-        // '../assets/mania_chalmers_2001.dot',
-        // '../assets/milleville-pennel_charron_2015.dot',
-        // '../assets/nichols_etal_2000.dot',
-        // '../assets/robillard_etal_2003.dot',
-        // '../assets/ryan_griffin_2016.dot',
-        // '../assets/seay_etal_2002.dot',
-        // '../assets/usoh_etal_1999.dot',
-        // '../assets/witmer_etal_1996.dot',
-        // '../assets/witmer_singer_1998.dot'
+        '../assets/bangay_preston_1998.dot',
+        '../assets/busscher_etal_2011.dot',
+        '../assets/cooper_etal_2015.dot',
+        '../assets/kim_etal_2005.dot',
+        '../assets/knight_arns_2006.dot',
+        '../assets/lin_etal_2002.dot',
+        '../assets/ling_etal_2013.dot',
+        '../assets/liu_uang_2011.dot',
+        '../assets/mania_chalmers_2001.dot',
+        '../assets/milleville-pennel_charron_2015.dot',
+        '../assets/nichols_etal_2000.dot',
+        '../assets/robillard_etal_2003.dot',
+        '../assets/ryan_griffin_2016.dot',
+        '../assets/seay_etal_2002.dot',
+        '../assets/usoh_etal_1999.dot',
+        '../assets/witmer_etal_1996.dot',
+        '../assets/witmer_singer_1998.dot'
     ];
 
     for (let f of filePaths) {

@@ -1,7 +1,5 @@
 import * as THREE from 'three';
-
 import { CONFIG, getScene, getRenderer } from './main.js';
-
 
 export function setAlpha(colorString, alpha) {
     const updatedColor = colorString.replace(/rgba\(([\d\s,]+),\s*\d*\.?\d*\)/, `rgba($1, ${alpha})`); 
@@ -150,14 +148,19 @@ export function createDot() {
     return dot;
 }
 
-// export function createLine(nodeX, nodeY, shape1Y, shape2Y) {
-//     const [x, y] = worldCoordsFromTextureCoords(nodeX, nodeY);
-//     const points = [
-//         new THREE.Vector3(x, shape1Y, y),
-//         new THREE.Vector3(x, shape2Y, y)
-//     ];
-//     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-//     const material = new THREE.LineBasicMaterial({ color: 'rgba(0, 0, 0)' });
-//     const line = new THREE.Line(geometry, material);
-//     return line;
-// }
+export function createLine(x=0, y=0, z=0, height=0) {
+    const points = [
+        new THREE.Vector3(x, y, z),
+        new THREE.Vector3(x, y + height, z)
+    ];
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.PointsMaterial({
+        color: '#000000',
+        size: 5,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false,
+    });
+    const line = new THREE.Line(geometry, material);
+    return line;
+}
