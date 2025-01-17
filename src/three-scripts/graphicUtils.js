@@ -66,7 +66,7 @@ export function makeReferenceText(text) {
     return makeText(16, 'left', 'center', text, 0, 0, 0);
 }
 
-function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
+export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
     // Super-sampling factor (increase for higher resolution)
     const resolutionFactor = 4;
 

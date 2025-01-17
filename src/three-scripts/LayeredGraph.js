@@ -1,6 +1,7 @@
 import { CONFIG, getScene, getCamera } from "./main.js";
 import { makePlane, makeTexture, makeReferenceText, makeLabelText } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
+import { Label } from "./Label.js";
 
 export class LayeredGraph {
     constructor() {
@@ -66,12 +67,12 @@ class Layer {
         this.referenceText = makeReferenceText(this.name);
         this.labelTexts = {};
         for (const n of this.nodes) {
-            this.labelTexts[n.id] = makeLabelText(n.id);
+            this.labelTexts[n.id] = new Label(n.id);
         }
         getScene().add(this.plane);
         getScene().add(this.referenceText);
         for (const [_, l] of Object.entries(this.labelTexts)) {
-            getScene().add(l);
+            getScene().add(l.getTextMesh());
         }
     }
 
@@ -83,7 +84,7 @@ class Layer {
             this.plane.position.z - CONFIG.LAYER_HEIGHT/2
         );
         for (const n of this.nodes) {
-            this.labelTexts[n.id].position.set(
+            this.labelTexts[n.id].setPosInit(
                 n.x * CONFIG.LAYER_WIDTH - CONFIG.LAYER_WIDTH/2,
                 this.plane.position.y,
                 (1 - n.y) * CONFIG.LAYER_HEIGHT - CONFIG.LAYER_HEIGHT/2
@@ -97,19 +98,23 @@ class Layer {
     }
 
     updateLabels() {
-        // Face camera
-        for (const [_, l] of Object.entries(this.labelTexts)) {
-			l.quaternion.copy(getCamera().quaternion);
+        for (const [k1, l1] of Object.entries(this.labelTexts)) {
+            l1.faceCamera();
+            // for (const [k2, l2] of Object.entries(this.labelTexts)) {
+            //     if (k1 != k2) {
+            //         if (l1.isOverlapping(l2)) {
+            //             l1.selectPosAlternative();
+            //         }
+            //     }
+            // }
         }
-
-        // Prevent overlaps
 	}
 
     removeLayer() {
         getScene().remove(this.plane);
         getScene().remove(this.referenceText);
         for (const [_, l] of Object.entries(this.labelTexts)) {
-            getScene().remove(l);
+            getScene().remove(l.getTextMesh());
         }
     }
 }

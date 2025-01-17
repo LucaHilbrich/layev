@@ -55,7 +55,7 @@ checkboxSignificant.addEventListener('change', function() {
 
 checkboxAnalyzed.addEventListener('change', function() {
     if (this.checked) {
-        CONFIG.COLORS.a = setAlpha(CONFIG.COLORS.a, 1.0);
+        CONFIG.COLORS.a = setAlpha(CONFIG.COLORS.a, 0.4);
     } else {
         CONFIG.COLORS.a = setAlpha(CONFIG.COLORS.a, 0.0);
     }
@@ -64,7 +64,7 @@ checkboxAnalyzed.addEventListener('change', function() {
 
 checkboxMeasured.addEventListener('change', function() {
     if (this.checked) {
-        CONFIG.COLORS.m = setAlpha(CONFIG.COLORS.m, 1.0);
+        CONFIG.COLORS.m = setAlpha(CONFIG.COLORS.m, 0.2);
     } else {
         CONFIG.COLORS.m = setAlpha(CONFIG.COLORS.m, 0.0);
     }

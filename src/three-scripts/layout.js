@@ -14,7 +14,9 @@ export async function applyFcose(layers) {
             nodes.add(n);
         }
         for (const e of layer.edges) {
-            edges.push(e);
+            if (e.type == 's' || e.type == 'sp' || e.type == 'sn') {
+                edges.push(e);
+            }
         }
     }
     nodes = Array.from(nodes);
