@@ -186,7 +186,6 @@ export function makeIntegratedGraphVisualization(layers, checkedEdges=['sp', 'sn
     layers.forEach((layer, name) => {
         for (const e of layer.edges) {
             if (checkedEdges.includes(e.type)) {
-                console.log(checkedEdges, e.type);
                 const idx = significantEdges.findIndex(x => x.src === e.src && x.dst === e.dst);
                 if (idx >= 0) {
                     significantEdges[idx]['n'] += 1;
@@ -261,7 +260,7 @@ export function makeIntegratedGraphVisualization(layers, checkedEdges=['sp', 'sn
     shape.material.transparent = true;
     shape.material.needsUpdate = true;
 
-    return shape;
+    return [shape, significantEdges];
 }
 
 function drawIntegratedGradientEdge(context, x1, y1, x2, y2, col, lineWidth) {

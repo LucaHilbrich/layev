@@ -11,13 +11,13 @@ export class LayeredGraph {
         this.integratedLayer = null;
     }
 
-    addLayer(dotName, dotFile) {
+    addLayer(dotName, dotFile, checkedEdges) {
         this.layers.set(dotName, new Layer(dotFile));
         this.layers = layerSort(this.layers);
+        this.updateIntegratedLayer();
         this.setLayout();
         this.updateLayerPositions();
-        this.updateLayerTextures();
-        this.updateIntegratedLayer();
+        this.updateLayerTextures(checkedEdges);
     }
 
     updateLayerPositions() {
@@ -49,7 +49,7 @@ export class LayeredGraph {
         if (this.integratedLayer) {
             getScene().remove(this.integratedLayer);
         }
-        this.integratedLayer = makeIntegratedGraphVisualization(this.layers, checkedEdges);
+        [this.integratedLayer, this.significantEdges] = makeIntegratedGraphVisualization(this.layers, checkedEdges);
         getScene().add(this.integratedLayer);
     }
 
@@ -98,7 +98,7 @@ export class LayeredGraph {
     }
 
     setLayout() {
-        applyFcose(this.layers);
+        applyFcose(this);
     }
 }
 

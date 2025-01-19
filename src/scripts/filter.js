@@ -63,7 +63,7 @@ checkboxMeasured.addEventListener('change', function() {
     layeredGraph.updateLayerTextures(getChecked());
 });
 
-function getChecked() {
+export function getChecked() {
     let checked = [];
     if (checkboxSignificantPositive.checked) {
         checked.push('sp');

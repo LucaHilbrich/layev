@@ -4,22 +4,41 @@ import { CONFIG } from './main';
 
 cytoscape.use(fcose);
 
-export async function applyFcose(layers) {
+export async function applyFcose(layeredGraph) {
 
     // Transform data
     let nodes = new Set();
     let edges = [];
-    layers.forEach((layer, name) => {
+    layeredGraph.layers.forEach((layer, name) => {
         for (const n of layer.nodes) {
             nodes.add(n);
         }
+    });
+    nodes = Array.from(nodes);
+
+    // Count significant edges
+    layeredGraph.layers.forEach((layer, name) => {
         for (const e of layer.edges) {
-            if (e.type == 's' || e.type == 'sp' || e.type == 'sn') {
-                edges.push(e);
+            if (e['type'] === 'sp' || e['type'] === 'sn' || e['type'] === 's') {
+                const idx = edges.findIndex(x => x.src === e.src && x.dst === e.dst);
+                if (idx >= 0) {
+                    edges[idx]['n'] += 1;
+                } else {
+                    let temp = {'src': e.src, 'dst': e.dst, 'n': 1};
+                    edges.push(temp);
+                }
             }
         }
     });
-    nodes = Array.from(nodes);
+    let nMax = 0;
+    for (let e of edges) {
+        if (e['n'] > nMax) {
+            nMax = e['n'];
+        }
+    }
+    for (let i = 0; i < edges.length; i++) {
+        edges[i]['n'] /= nMax;
+    }
 
     // // Prepare elements for cytoscape
     let elements = [];
@@ -40,12 +59,15 @@ export async function applyFcose(layers) {
     let normalizedPositions;
     cy.layout({
         name: 'fcose',
-        nodeRepulsion: 10000,
-        edgeElasticity: 0.5,
-        
-        // idealEdgeLength: function (edge) {
-        //     return edge.data().weight * 400;
-        // },
+        animate: true,
+        randomize: false,
+        fixedNodeConstraint: [{nodeId: 'Cybersickness', position: {x: 100, y: 200}}, {nodeId: 'Presence', position: {x: 700, y: 200}}],
+        boundingBox: {x1: 0, y1: 0, w: 800, h: 400},
+        nodeRepulsion: 2000000,
+        edgeElasticity: 0.8,
+        idealEdgeLength: function (edge) {
+            return edge.data().weight * 400;
+        },
         
         ready: () => {
             let nodePositions = cy.nodes().map(node => node.position());
@@ -63,7 +85,7 @@ export async function applyFcose(layers) {
                     y: (pos.y - minY) / (maxY - minY)
                 };
             });
-            layers.forEach((layer, name) => {
+            layeredGraph.layers.forEach((layer, name) => {
                 for (const [i, _] of layer.nodes.entries()) {
                     const id = layer.nodes[i].id;
                     const p = normalizedPositions.find(x => x.id === id);

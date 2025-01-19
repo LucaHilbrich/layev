@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { LayeredGraph } from './LayeredGraph.js';
+import { getChecked } from '../scripts/filter.js';
 
 // Configuration parameters
 export let CONFIG = {
@@ -38,8 +39,8 @@ export function getScene() {
 const WIDTH = renderSpace.clientWidth / 500;
 const HEIGHT = renderSpace.clientHeight / 500;
 const camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 1000 );
-camera.position.set(1, 0.7, 3);
-camera.zoom = 1.5;
+camera.position.set(0, 6, 0);
+camera.zoom = 2.5;
 camera.updateProjectionMatrix();
 export function getCamera() {
 	return camera;
@@ -76,7 +77,7 @@ export const layeredGraph = new LayeredGraph();
 
 // Triggered when .dot file is uploaded
 export function addToVisualization(dotName, dotFile) {
-    layeredGraph.addLayer(dotName, dotFile);
+    layeredGraph.addLayer(dotName, dotFile, getChecked());
 }
 
 // Triggered when .dot file is deleted
