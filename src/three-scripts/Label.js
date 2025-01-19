@@ -14,6 +14,7 @@ export class Label {
 
     faceCamera() {
 		this.textMesh.quaternion.copy(getCamera().quaternion);
+
     }
 
     setScale() {

@@ -15,8 +15,8 @@ export let CONFIG = {
         'sp': 'rgba(171, 206, 48, 1.0)',
         'sn': 'rgba(250, 26, 13, 1.0)',
         's': 'rgba(88, 180, 238, 1.0)',
-        'a': 'rgba(0, 0, 0, 0.0)',
-        'm': 'rgba(120, 120, 120, 0.0)'
+        'a': 'rgba(140, 140, 140, 1.0)',
+        'm': 'rgba(180, 180, 180, 1.0)'
     }
 }
 
@@ -38,7 +38,7 @@ export function getScene() {
 const WIDTH = renderSpace.clientWidth / 500;
 const HEIGHT = renderSpace.clientHeight / 500;
 const camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 1000 );
-camera.position.set(1, 0.7, 2);
+camera.position.set(1, 0.7, 3);
 camera.zoom = 1.5;
 camera.updateProjectionMatrix();
 export function getCamera() {
@@ -88,5 +88,6 @@ export function removeFromVisualization(dotName) {
 function animate() {
     controls.update();
     layeredGraph.updateLayerLabels();
+    layeredGraph.updateIntegratedLayerOpacity();
     renderer.render(scene, camera);
 }

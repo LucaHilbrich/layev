@@ -1,6 +1,6 @@
 import * as THREE from 'three'; 
 import { CONFIG, getScene, getCamera } from "./main.js";
-import { makePlane, makeTexture, makeReferenceText, createDot, createLine } from "./graphicUtils.js";
+import { makePlane, makeTexture, makeReferenceText, createDot, createLine, makeIntegratedGraphVisualization } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
 import { Label } from "./Label.js";
 import { layerSort } from './layerSort.js';
@@ -8,6 +8,7 @@ import { layerSort } from './layerSort.js';
 export class LayeredGraph {
     constructor() {
         this.layers = new Map();
+        this.integratedLayer = null;
     }
 
     addLayer(dotName, dotFile) {
@@ -16,6 +17,7 @@ export class LayeredGraph {
         this.setLayout();
         this.updateLayerPositions();
         this.updateLayerTextures();
+        this.updateIntegratedLayer();
     }
 
     updateLayerPositions() {
@@ -29,16 +31,35 @@ export class LayeredGraph {
         this.addNodeLines();
     }
 
-    updateLayerTextures() {
+    updateLayerTextures(checkedEdges) {
         this.layers.forEach((layer, name) => {
-            layer.updateTexture();
+            layer.updateTexture(checkedEdges);
         });
+        this.updateIntegratedLayer(checkedEdges);
     }
 
     updateLayerLabels() {
         this.layers.forEach((layer, name) => {
             layer.updateLabels();
+            layer.updateDots();
         });
+    }
+
+    updateIntegratedLayer(checkedEdges) {
+        if (this.integratedLayer) {
+            getScene().remove(this.integratedLayer);
+        }
+        this.integratedLayer = makeIntegratedGraphVisualization(this.layers, checkedEdges);
+        getScene().add(this.integratedLayer);
+    }
+
+    updateIntegratedLayerOpacity() {
+        if (this.integratedLayer) {
+            const cameraDirection = new THREE.Vector3();
+            getCamera().getWorldDirection(cameraDirection);
+            let angle = cameraDirection.angleTo(this.integratedLayer.position);
+            this.integratedLayer.material.opacity = 48 * (angle - Math.PI) + 1.0;
+        }
     }
 
     addNodeLines() {
@@ -58,6 +79,12 @@ export class LayeredGraph {
     toggleLabelVisibility() {
         this.layers.forEach((layer, name) => {
             layer.toggleLabelVisibility();
+        });
+    }
+
+    toggleReferenceLabelVisibility() {
+        this.layers.forEach((layer, name) => {
+            layer.toggleReferenceLabelVisibility();
         });
     }
 
@@ -133,8 +160,8 @@ class Layer {
         }
     }
 
-    updateTexture() {
-        this.plane.material.map = makeTexture(this.nodes, this.edges);
+    updateTexture(checkedEdges) {
+        this.plane.material.map = makeTexture(this.nodes, this.edges, checkedEdges);
         this.plane.material.needsUpdate = true;
     }
 
@@ -152,10 +179,26 @@ class Layer {
         }
 	}
 
+    updateDots() {
+        for (const [k, p] of Object.entries(this.nodePoints)) {
+            p.material.size = 2 * getCamera().zoom;
+            p.material.needsUpdate = true;
+        }
+	}
+
     toggleLabelVisibility() {
         for (const [k, l] of Object.entries(this.labelTexts)) {
             l.toggleVisibility();
         }
+    }
+
+    toggleReferenceLabelVisibility() {
+        if (this.referenceText.material.opacity === 1) {
+            this.referenceText.material.opacity = 0;
+        } else {
+            this.referenceText.material.opacity = 1;
+        }
+        this.referenceText.material.needsUpdate = true;
     }
 
     removeLayer() {
