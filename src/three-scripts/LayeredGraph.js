@@ -3,6 +3,7 @@ import { CONFIG, getScene, getCamera } from "./main.js";
 import { makePlane, makeTexture, makeReferenceText, createDot, createLine } from "./graphicUtils.js";
 import { applyFcose } from "./layout.js";
 import { Label } from "./Label.js";
+import { layerSort } from './layerSort.js';
 
 export class LayeredGraph {
     constructor() {
@@ -10,40 +11,41 @@ export class LayeredGraph {
     }
 
     addLayer(dotName, dotFile) {
-        this.layers[dotName] = new Layer(dotFile);
+        this.layers.set(dotName, new Layer(dotFile));
+        this.layers = layerSort(this.layers);
         this.setLayout();
         this.updateLayerPositions();
         this.updateLayerTextures();
     }
 
     updateLayerPositions() {
-        const nLayers = Object.keys(this.layers).length;
-        for (const [index, [name, layer]] of Object.entries(Object.entries(this.layers))) {
+        const nLayers = this.layers.size;
+        let index = 0;
+        this.layers.forEach((layer, name) => {
             layer.updatePosition(index, nLayers);
             layer.removeNodeLines();
-        }
+            index++;
+        });
         this.addNodeLines();
-        // console.log('Updated positions.');
     }
 
     updateLayerTextures() {
-        for (const [name, layer] of Object.entries(this.layers)) {
+        this.layers.forEach((layer, name) => {
             layer.updateTexture();
-        }
-        // console.log('Updated textures.');
+        });
     }
 
     updateLayerLabels() {
-        for (const [name, layer] of Object.entries(this.layers)) {
+        this.layers.forEach((layer, name) => {
             layer.updateLabels();
-        }
+        });
     }
 
     addNodeLines() {
-        const layerKeys = Object.keys(this.layers); // Get the keys of the layers object
+        const layerKeys = Array.from(this.layers.keys());
         for (let i = 0; i < layerKeys.length - 1; i++) {
-            const currentLayer = this.layers[layerKeys[i]];
-            const nextLayer = this.layers[layerKeys[i + 1]];
+            const currentLayer = this.layers.get(layerKeys[i]);
+            const nextLayer = this.layers.get(layerKeys[i + 1]);
 
             for (const node of currentLayer.nodes) {
                 if (nextLayer.nodes.some(obj => obj.id === node.id)) {
@@ -54,8 +56,9 @@ export class LayeredGraph {
     }
 
     removeLayer(dotName) {
-        this.layers[dotName].removeLayer();
-        delete this.layers[dotName];
+        this.layers.get(dotName).removeLayer();
+        this.layers.delete(dotName);
+        this.layers = layerSort(this.layers);
         this.setLayout();
         this.updateLayerPositions();
         this.updateLayerTextures();

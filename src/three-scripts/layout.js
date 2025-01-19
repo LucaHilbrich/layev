@@ -9,7 +9,7 @@ export async function applyFcose(layers) {
     // Transform data
     let nodes = new Set();
     let edges = [];
-    for (const [name, layer] of Object.entries(layers)) {
+    layers.forEach((layer, name) => {
         for (const n of layer.nodes) {
             nodes.add(n);
         }
@@ -18,7 +18,7 @@ export async function applyFcose(layers) {
                 edges.push(e);
             }
         }
-    }
+    });
     nodes = Array.from(nodes);
 
     // // Prepare elements for cytoscape
@@ -63,8 +63,7 @@ export async function applyFcose(layers) {
                     y: (pos.y - minY) / (maxY - minY)
                 };
             });
-
-            for (const [name, layer] of Object.entries(layers)) {
+            layers.forEach((layer, name) => {
                 for (const [i, _] of layer.nodes.entries()) {
                     const id = layer.nodes[i].id;
                     const p = normalizedPositions.find(x => x.id === id);
@@ -72,7 +71,7 @@ export async function applyFcose(layers) {
                     layer.nodes[i].x = p.x;
                     layer.nodes[i].y = p.y;
                 }
-            }
+            });
             console.log('Set layout.');
         }
     }).run();
