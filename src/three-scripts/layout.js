@@ -72,7 +72,6 @@ export async function applyFcose(layers) {
                     layer.nodes[i].y = p.y;
                 }
             });
-            console.log('Set layout.');
         }
     }).run();
 }

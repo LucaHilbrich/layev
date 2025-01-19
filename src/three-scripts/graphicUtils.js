@@ -66,7 +66,7 @@ export function makeReferenceText(text) {
 
 export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
     // Super-sampling factor (increase for higher resolution)
-    const resolutionFactor = 4;
+    const resolutionFactor = 8;
 
     // Create a canvas to draw the text
     const canvas = document.createElement('canvas');
@@ -74,7 +74,7 @@ export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
 
     // Set the font for measuring text
     const scaledFontSize = fontSize * resolutionFactor;
-    context.font = `${scaledFontSize}px Montserrat`;
+    context.font = `bold ${scaledFontSize}px Montserrat`;
 
     // Measure the text dimensions
     const textWidth = context.measureText(text).width;
@@ -94,6 +94,8 @@ export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw the text
+    context.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Subtle shadow for smooth edges
+    context.shadowBlur = 4; // Adjust based on font size
     context.fillStyle = 'black';
     const xOffset = textAlign === 'center' ? canvas.width / 2 : textAlign === 'right' ? canvas.width : 0;
     const yOffset = textBaseline === 'middle' ? canvas.height / 2 : textBaseline === 'bottom' ? canvas.height : scaledFontSize;
@@ -101,8 +103,9 @@ export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
 
     // Create a texture from the high-resolution canvas
     const texture = new THREE.CanvasTexture(canvas);
-    texture.minFilter = THREE.LinearMipMapLinearFilter;
-    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearFilter; // Avoid blurring due to mipmaps
+    texture.magFilter = THREE.NearestFilter; // Use nearest neighbor for sharper scaling
+    texture.generateMipmaps = false; // Disable mipmaps for text
     texture.anisotropy = getRenderer().capabilities.getMaxAnisotropy();
 
     // Downscale the plane geometry to match the original font size
@@ -115,7 +118,7 @@ export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
         map: texture,
         transparent: true,
         side: THREE.DoubleSide,
-        alphaTest: 0.5
+        alphaTest: 0.1
     });
 
     // Create the mesh

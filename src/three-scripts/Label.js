@@ -5,30 +5,30 @@ import { getCamera } from './main';
 export class Label {
     constructor(text) {
         this.text = text;
-        this.textMesh = makeText(8, 'center', 'center', this.text, 0, 0, 0);
-        this.posInit = new THREE.Vector3(0, 0, 0);
-        this.posAlternative = new THREE.Vector3(0, 0, 0);
-        this.selectedPos = 'init';
+        this.textMesh = makeText(16, 'center', 'center', this.text, 0, 0, 0);
     }
 
-    setPosInit(x, y, z) {
-        this.posInit.set(x, y, z);
-        this.posAlternative.set(x, y + 0.01, z);
-        this.textMesh.position.set(this.posInit.x, this.posInit.y, this.posInit.z);
-    }
-
-    selectPosInit() {
-        this.textMesh.position.set(this.posInit.x, this.posInit.y, this.posInit.z);
-        this.selectedPos = 'init';
-    }
-
-    selectPosAlternative() {
-        this.textMesh.position.set(this.posInit.x + Math.random() * 0.1, this.posInit.y+ Math.random() * 0.1, this.posInit.z+ Math.random() * 0.1);
-        this.selectedPos = 'alternative';
+    setPos(x, y, z) {
+        this.textMesh.position.set(x, y, z);
     }
 
     faceCamera() {
 		this.textMesh.quaternion.copy(getCamera().quaternion);
+    }
+
+    setScale() {
+        const zoom = getCamera().zoom > 2 ? getCamera().zoom : 2;
+        const scale = 1 / zoom;
+        this.textMesh.scale.set(scale, scale, scale);
+    }
+
+    toggleVisibility() {
+        if (this.textMesh.material.opacity === 1) {
+            this.textMesh.material.opacity = 0;
+        } else {
+            this.textMesh.material.opacity = 1;
+        }
+        this.textMesh.material.needsUpdate = true;
     }
 
     isOverlapping(other) {

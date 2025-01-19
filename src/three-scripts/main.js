@@ -49,6 +49,7 @@ const controls = new OrbitControls( camera, renderer.domElement );
 controls.maxPolarAngle = Math.PI * 0.5;
 controls.minDistance = 1;
 controls.maxDistance = 8;
+controls.enableDamping = true;
 
 // Resizing TODO: Fix canvas resize bug
 // window.addEventListener('resize', resizeRenderer, false);
@@ -85,7 +86,7 @@ export function removeFromVisualization(dotName) {
 
 // Animation loop
 function animate() {
-    // resizeRenderer();
+    controls.update();
     layeredGraph.updateLayerLabels();
     renderer.render(scene, camera);
 }

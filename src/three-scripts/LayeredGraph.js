@@ -55,6 +55,12 @@ export class LayeredGraph {
         }
     }
 
+    toggleLabelVisibility() {
+        this.layers.forEach((layer, name) => {
+            layer.toggleLabelVisibility();
+        });
+    }
+
     removeLayer(dotName) {
         this.layers.get(dotName).removeLayer();
         this.layers.delete(dotName);
@@ -122,19 +128,20 @@ class Layer {
         );
         for (const n of this.nodes) {
             const [x, y] = worldCoordsFromTextureCoords(n.x, n.y);
-            this.labelTexts[n.id].setPosInit(x, this.plane.position.y, y);
+            this.labelTexts[n.id].setPos(x, this.plane.position.y, y);
             this.nodePoints[n.id].position.set(x, this.plane.position.y, y);
         }
     }
 
     updateTexture() {
         this.plane.material.map = makeTexture(this.nodes, this.edges);
-        // this.plane.material.needsUpdate = true;
+        this.plane.material.needsUpdate = true;
     }
 
     updateLabels() {
         for (const [k1, l1] of Object.entries(this.labelTexts)) {
             l1.faceCamera();
+            l1.setScale();
             // for (const [k2, l2] of Object.entries(this.labelTexts)) {
             //     if (k1 != k2) {
             //         if (l1.isOverlapping(l2)) {
@@ -144,6 +151,12 @@ class Layer {
             // }
         }
 	}
+
+    toggleLabelVisibility() {
+        for (const [k, l] of Object.entries(this.labelTexts)) {
+            l.toggleVisibility();
+        }
+    }
 
     removeLayer() {
         getScene().remove(this.plane);

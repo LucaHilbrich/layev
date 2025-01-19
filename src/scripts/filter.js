@@ -19,11 +19,7 @@ checkboxReferences.addEventListener('change', function() {
 });
 
 checkboxNodeLabels.addEventListener('change', function() {
-    if (this.checked) {
-        console.log('Node Labels on.');
-    } else {
-        console.log('Node Labels off.');
-    }
+    layeredGraph.toggleLabelVisibility();
 });
 
 checkboxSignificantPositive.addEventListener('change', function() {
