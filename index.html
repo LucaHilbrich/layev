@@ -28,15 +28,18 @@
             <div class="collapsible-content">
               <section class="content-inner">
                 <p>
-                    LayEv (Layered Evidence) is an interactive visualization system to explore the
-                    results of systematic evidence synthesis. Each layer represents the found effects of
-                    an empirical study. The data is provided as graphs via .dot files, as shown below.
-                    Each digraph object has a name (e.g., authors and year of the corresponding publication)
-                    and a body specifying relationships between variables. Each line consists of two nodes
-                    named after variables ("A", "B", "C", "D" in the example below) connected by a directed edge
-                    (->) indicating causal direction. For each edge, a type is specified indicating the kind of
-                    relationship between the variables ("s+": significant positive, "s-": significant negative,
-                    "s": significant (sign unknown), "a": analyzed but not significant, "m": measured but not analyzed).
+                    LayEv (Layered Evidence) is an interactive visualization system designed to explore the results of
+                    systematic evidence synthesis. Each layer corresponds to the reported effects of an individual empirical
+                    study. The input data has to be provided as digraph objects via text files with a <tt>.dot</tt> extension.
+                    A digraph object contains a name, typically denoting the authors and publication year of the study,
+                    and a body specifying the graph data. Each line specifies a connection between two variables (nodes),
+                    connected by a directed edge indicated by an arrow (<tt>-></tt>). Undirected relationships are
+                    specified by including a pair of directed edges covering both directions. Additionally, each edge
+                    includes a type that specifies the nature of the relationship: <tt>"sp"</tt> for a significant
+                    positive relationship, <tt>"sn"</tt> for a significant negative relationship, <tt>"s"</tt> for a
+                    significant relationship where the sign is unknown, <tt>"a"</tt> for analyzed relationships were
+                    no significant effect has been found, and <tt>"m"</tt> for measured relationships that have not
+                    been analyzed. An example of a valid <tt>.dot</tt> file is shown below.
                 </p>
                 <pre class="fragment-mono-regular">
 digraph Example {
