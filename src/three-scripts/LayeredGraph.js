@@ -100,8 +100,8 @@ export class LayeredGraph {
         this.updateNodeLockPanel();
     }
 
-    setLayout() {
-        applyFcose(this);
+    setLayout(fixedNodeConstraint=[]) {
+        applyFcose(this, fixedNodeConstraint);
     }
 
     updateNodeLockPanel() {

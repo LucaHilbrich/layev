@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { LayeredGraph } from './LayeredGraph.js';
 import { getChecked } from '../scripts/filter.js';
+import { getFixedNodeConstraint } from '../scripts/nodeLock.js';
 
 // Configuration parameters
 export let CONFIG = {
@@ -83,6 +84,12 @@ export function addToVisualization(dotName, dotFile) {
 // Triggered when .dot file is deleted
 export function removeFromVisualization(dotName) {
     layeredGraph.removeLayer(dotName);
+}
+
+export function updateNodeLocking() {
+    layeredGraph.setLayout(getFixedNodeConstraint());
+    layeredGraph.updateLayerPositions();
+    layeredGraph.updateLayerTextures(getChecked());
 }
 
 // Animation loop

@@ -1,10 +1,12 @@
 import cytoscape from 'cytoscape';
 import fcose from 'cytoscape-fcose';
+import cola from 'cytoscape-cola';
 import { CONFIG } from './main';
 
 cytoscape.use(fcose);
+cytoscape.use(cola);
 
-export async function applyFcose(layeredGraph) {
+export async function applyFcose(layeredGraph, fixedNodeConstraint) {
 
     // Transform data
     let nodes = new Set();
@@ -40,7 +42,7 @@ export async function applyFcose(layeredGraph) {
         edges[i]['n'] /= nMax;
     }
 
-    // // Prepare elements for cytoscape
+    // Prepare elements for cytoscape
     let elements = [];
     for (let n of nodes) {
         elements.push({ data: { id: n.id } });
@@ -61,12 +63,13 @@ export async function applyFcose(layeredGraph) {
         name: 'fcose',
         animate: true,
         randomize: false,
-        fixedNodeConstraint: [{nodeId: 'Cybersickness', position: {x: 100, y: 200}}, {nodeId: 'Presence', position: {x: 700, y: 200}}],
-        boundingBox: {x1: 0, y1: 0, w: 800, h: 400},
-        nodeRepulsion: 2000000,
-        edgeElasticity: 0.8,
+        // fixedNodeConstraint: [{nodeId: 'Cybersickness', position: {x: 100, y: 200}}, {nodeId: 'Presence', position: {x: 700, y: 200}}],
+        fixedNodeConstraint: fixedNodeConstraint,
+        // boundingBox: {x1: 0, y1: 0, w: 800, h: 400},
+        nodeRepulsion: 200000000,
+        edgeElasticity: 0.1,
         idealEdgeLength: function (edge) {
-            return edge.data().weight * 400;
+            return edge.data().weight * 50;
         },
         
         ready: () => {
