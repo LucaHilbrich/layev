@@ -47,7 +47,7 @@ export async function applyFcose(layeredGraph, fixedNodeConstraint) {
     // Prepare elements for cytoscape
     let elements = [];
     for (let n of nodes) {
-        elements.push({ data: { id: n.id } });
+        elements.push({ data: { id: n.id, outlier: false } });
     }
     for (let e of edges) {
         elements.push({ data: { source: e.src, target: e.dst, weight: 1.0 - e.n } });
@@ -59,17 +59,15 @@ export async function applyFcose(layeredGraph, fixedNodeConstraint) {
         styleEnabled: true,
         elements: elements
     });
-    console.log(fixedNodeConstraint);
 
     cy.layout({
         name: 'fcose',
         animate: true,
         randomize: true,
-        // fixedNodeConstraint: [{nodeId: 'Cybersickness', position: {x: 100, y: 200}}, {nodeId: 'Presence', position: {x: 700, y: 200}}],
         fixedNodeConstraint: fixedNodeConstraint,
         boundingBox: {x1: 0, y1: 0, w: 800, h: 400},
-        // nodeRepulsion: 200000000,
-        // edgeElasticity: 0.1,
+        nodeRepulsion: 200000000,
+        edgeElasticity: 0.1,
         idealEdgeLength: function (edge) {
             return edge.data().weight * 50;
         },

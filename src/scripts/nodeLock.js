@@ -40,11 +40,10 @@ export function getFixedNodeConstraint() {
             position: {x: equidistantPoints[index].x * 800, y: equidistantPoints[index].y * 400}
         });
     }
-    console.log('hhhhhhhh', fixedNodeConstraint);
     return fixedNodeConstraint;
 }
 
-function generateEquidistantPoints(nPoints, distance=0.2) {
+function generateEquidistantPoints(nPoints, distance=0.5) {
     if (nPoints == 1) {
         return [{ x: 0, y: 0 }];
     }
