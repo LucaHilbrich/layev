@@ -30,24 +30,25 @@ export function removeAllNodesFromNodeLockPanel() {
 
 export function getFixedNodeConstraint() {
     const lockedNodeIds = getLockedNodes();
-    if (lockedNodeIds.length <= 0) {
-        return [{nodeId: '', position: {x: 0, y: 0}}];
-    }
 
     const equidistantPoints = generateEquidistantPoints(lockedNodeIds.length);
-    console.log(equidistantPoints)
     
     let fixedNodeConstraint = [];
     for (const [index, id] of lockedNodeIds.entries()) {
         fixedNodeConstraint.push({
             nodeId: id,
-            position: {x: equidistantPoints[index].x * 800, y: equidistantPoints[index].y * 800}
+            position: {x: equidistantPoints[index].x * 800, y: equidistantPoints[index].y * 400}
         });
     }
+    console.log('hhhhhhhh', fixedNodeConstraint);
     return fixedNodeConstraint;
 }
 
 function generateEquidistantPoints(nPoints, distance=0.2) {
+    if (nPoints == 1) {
+        return [{ x: 0, y: 0 }];
+    }
+
     const gridSize = Math.ceil(Math.sqrt(nPoints));
     
     const xValues = Array.from({ length: gridSize }, (_, i) => (i / (gridSize - 1)) * distance);
@@ -56,7 +57,7 @@ function generateEquidistantPoints(nPoints, distance=0.2) {
     const points = [];
     for (let y of yValues) {
         for (let x of xValues) {
-            points.push({ x: 0.5 + x - distance / 2, y: 0.5 + y - distance / 2 });
+            points.push({ x: x - distance / 2, y: y - distance / 2 });
         }
     }
     return points.slice(0, nPoints);
