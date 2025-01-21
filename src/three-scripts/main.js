@@ -82,7 +82,7 @@ export function addToVisualization(dotName, dotFile) {
 
 // Triggered when .dot file is deleted
 export function removeFromVisualization(dotName) {
-    layeredGraph.removeLayer(dotName);
+    layeredGraph.removeLayer(dotName, getChecked());
 }
 
 // Animation loop

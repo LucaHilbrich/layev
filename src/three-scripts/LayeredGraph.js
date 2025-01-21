@@ -88,13 +88,13 @@ export class LayeredGraph {
         });
     }
 
-    removeLayer(dotName) {
+    removeLayer(dotName, checkedEdges) {
         this.layers.get(dotName).removeLayer();
         this.layers.delete(dotName);
         this.layers = layerSort(this.layers);
         this.setLayout();
         this.updateLayerPositions();
-        this.updateLayerTextures();
+        this.updateLayerTextures(checkedEdges);
     }
 
     setLayout() {
@@ -155,7 +155,7 @@ class Layer {
         );
         for (const n of this.nodes) {
             const [x, y] = worldCoordsFromTextureCoords(n.x, n.y);
-            this.labelTexts[n.id].setPos(x, this.plane.position.y, y);
+            this.labelTexts[n.id].setPos(x, this.plane.position.y, y - 0.01);
             this.nodePoints[n.id].position.set(x, this.plane.position.y, y);
         }
     }

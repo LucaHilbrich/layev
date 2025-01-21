@@ -5,7 +5,7 @@ import { getCamera } from './main';
 export class Label {
     constructor(text) {
         this.text = text;
-        this.textMesh = makeText(16, 'center', 'center', this.text, 0, 0, 0);
+        this.textMesh = makeText(18, 'center', 'center', this.text, 0, 0, 0);
     }
 
     setPos(x, y, z) {

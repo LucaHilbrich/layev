@@ -1,11 +1,6 @@
 import * as THREE from 'three';
 import { CONFIG, getScene, getRenderer } from './main.js';
 
-export function setAlpha(colorString, alpha) {
-    const updatedColor = colorString.replace(/rgba\(([\d\s,]+),\s*\d*\.?\d*\)/, `rgba($1, ${alpha})`); 
-    return updatedColor;
-}
-
 export function makePlane() {
     let plane = new THREE.Mesh(
         new THREE.PlaneGeometry(CONFIG.LAYER_WIDTH, CONFIG.LAYER_HEIGHT),
@@ -68,7 +63,7 @@ export function makeReferenceText(text) {
 
 export function makeText(fontSize, textAlign, textBaseline, text, x, y, z) {
     // Super-sampling factor (increase for higher resolution)
-    const resolutionFactor = 8;
+    const resolutionFactor = 12;
 
     // Create a canvas to draw the text
     const canvas = document.createElement('canvas');
