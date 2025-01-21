@@ -1,10 +1,14 @@
 import cytoscape from 'cytoscape';
 import fcose from 'cytoscape-fcose';
+import cola from 'cytoscape-cola';
+import elk from 'cytoscape-elk';
 import { CONFIG } from './main';
 
 cytoscape.use(fcose);
+cytoscape.use(cola);
+cytoscape.use(elk);
 
-export async function applyFcose(layeredGraph) {
+export async function applyFcose(layeredGraph, fixedNodeConstraint) {
 
     // Transform data
     let nodes = new Set();
@@ -40,10 +44,10 @@ export async function applyFcose(layeredGraph) {
         edges[i]['n'] /= nMax;
     }
 
-    // // Prepare elements for cytoscape
+    // Prepare elements for cytoscape
     let elements = [];
     for (let n of nodes) {
-        elements.push({ data: { id: n.id } });
+        elements.push({ data: { id: n.id, outlier: false } });
     }
     for (let e of edges) {
         elements.push({ data: { source: e.src, target: e.dst, weight: 1.0 - e.n } });
@@ -56,39 +60,34 @@ export async function applyFcose(layeredGraph) {
         elements: elements
     });
 
-    let normalizedPositions;
     cy.layout({
         name: 'fcose',
         animate: true,
-        randomize: false,
-        fixedNodeConstraint: [{nodeId: 'Cybersickness', position: {x: 100, y: 200}}, {nodeId: 'Presence', position: {x: 700, y: 200}}],
+        randomize: true,
+        fixedNodeConstraint: fixedNodeConstraint,
         boundingBox: {x1: 0, y1: 0, w: 800, h: 400},
-        nodeRepulsion: 2000000,
-        edgeElasticity: 0.8,
+        nodeRepulsion: 200000000,
+        edgeElasticity: 0.1,
         idealEdgeLength: function (edge) {
-            return edge.data().weight * 400;
+            return edge.data().weight * 50;
         },
         
         ready: () => {
-            let nodePositions = cy.nodes().map(node => node.position());
-
-            const minX = Math.min(...nodePositions.map(pos => pos.x)) - CONFIG.NODE_PADDING;
-            const maxX = Math.max(...nodePositions.map(pos => pos.x)) + CONFIG.NODE_PADDING;
-            const minY = Math.min(...nodePositions.map(pos => pos.y)) - CONFIG.NODE_PADDING;
-            const maxY = Math.max(...nodePositions.map(pos => pos.y)) + CONFIG.NODE_PADDING;
-
-            normalizedPositions = cy.nodes().map(node => {
+            let nodePositions = cy.nodes().map(node => {
                 const pos = node.position();
                 return {
                     id: node.id(),
-                    x: (pos.x - minX) / (maxX - minX),
-                    y: (pos.y - minY) / (maxY - minY)
+                    x: pos.x,
+                    y: pos.y
                 };
             });
+
+            let adjustedNodePositions = adjust(nodePositions, 1, 1, calculateMidpoint(fixedNodeConstraint));
+
             layeredGraph.layers.forEach((layer, name) => {
                 for (const [i, _] of layer.nodes.entries()) {
                     const id = layer.nodes[i].id;
-                    const p = normalizedPositions.find(x => x.id === id);
+                    const p = adjustedNodePositions.find(x => x.id === id);
 
                     layer.nodes[i].x = p.x;
                     layer.nodes[i].y = p.y;
@@ -96,4 +95,74 @@ export async function applyFcose(layeredGraph) {
             });
         }
     }).run();
+}
+
+function calculateMidpoint(nodes) {
+    let midpoint = { x: 0, y: 0 };
+    for (const n of nodes) {
+        midpoint.x += n.position.x;
+        midpoint.y += n.position.y;
+    }
+    if (nodes.length > 0) {
+        midpoint.x /= nodes.length;
+        midpoint.y /= nodes.length;
+    }
+    return midpoint;
+}
+
+
+function adjust(nodes, layoutWidth, layoutHeight, midpoint) {
+	const dX = midpoint.x * layoutWidth;
+	const dY = midpoint.y * layoutHeight;
+	
+	let adjustedNodes = [];
+	for (const n of nodes) {
+        const id = n.id;
+		const x = n.x - dX;
+		const y = n.y - dY;
+		const adjustedNode = { id, x, y };
+		// adjustedNode.outlier = n.outlier;
+		adjustedNodes.push(adjustedNode);
+	}
+	
+	const [x, y] = getLargestDistantXandY(adjustedNodes);
+	
+	for (const n of adjustedNodes) {
+		n.x = n.x / x * (layoutWidth/2) + layoutWidth/2;
+		n.y = n.y / y * (layoutHeight/2) + layoutHeight/2;
+	}
+	
+	// projectOutliersToEdges(adjustedNodes, layoutWidth, layoutHeight);
+	
+	return adjustedNodes;
+}
+
+function getLargestDistantXandY(nodes) {
+	let x = 0;
+	let y = 0;
+	
+	for (const n of nodes) {
+		if (!n.outlier) {
+			if (Math.abs(n.x) > x) {
+				x = Math.abs(n.x);
+			}
+
+			if (Math.abs(n.y) > y) {
+				y = Math.abs(n.y);
+			}
+		}
+	}
+	
+	return [x, y];
+}
+
+function projectOutliersToEdges(nodes, layoutWidth, layoutHeight) {
+	for (const n of nodes) {
+		if (n.outlier) {
+			if (n.x < -layoutWidth/2) { n.x = -layoutWidth/2; }
+			if (n.x > layoutWidth/2) { n.x = layoutWidth/2; }
+			if (n.y < -layoutHeight/2) { n.y = -layoutHeight/2; }
+			if (n.y > layoutHeight/2) { n.y = layoutHeight/2; }
+		}
+	}
 }

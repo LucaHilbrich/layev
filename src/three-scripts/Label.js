@@ -24,7 +24,7 @@ export class Label {
     }
 
     toggleVisibility() {
-        if (this.textMesh.material.opacity === 1) {
+        if (this.textMesh.material.opacity > 1) {
             this.textMesh.material.opacity = 0;
         } else {
             this.textMesh.material.opacity = 1;

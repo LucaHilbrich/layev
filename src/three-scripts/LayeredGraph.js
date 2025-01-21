@@ -4,6 +4,7 @@ import { makePlane, makeTexture, makeReferenceText, createDot, createLine, makeI
 import { applyFcose } from "./layout.js";
 import { Label } from "./Label.js";
 import { layerSort } from './layerSort.js';
+import { addNodeToNodeLockPanel, removeAllNodesFromNodeLockPanel } from '../scripts/nodeLock.js';
 
 export class LayeredGraph {
     constructor() {
@@ -18,6 +19,7 @@ export class LayeredGraph {
         this.setLayout();
         this.updateLayerPositions();
         this.updateLayerTextures(checkedEdges);
+        this.updateNodeLockPanel();
     }
 
     updateLayerPositions() {
@@ -95,10 +97,25 @@ export class LayeredGraph {
         this.setLayout();
         this.updateLayerPositions();
         this.updateLayerTextures(checkedEdges);
+        this.updateNodeLockPanel();
     }
 
-    setLayout() {
-        applyFcose(this);
+    setLayout(fixedNodeConstraint=[]) {
+        applyFcose(this, fixedNodeConstraint);
+    }
+
+    updateNodeLockPanel() {
+        removeAllNodesFromNodeLockPanel();
+        let nodeIds = [];
+        this.layers.forEach((layer, name) => {
+            for (const n of layer.nodes) {
+                nodeIds.push(n.id);
+            }
+        });
+        nodeIds = Array.from(new Set(nodeIds));
+        for (const n of nodeIds) {
+            addNodeToNodeLockPanel(n);
+        }
     }
 }
 
