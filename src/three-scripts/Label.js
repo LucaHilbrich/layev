@@ -5,7 +5,8 @@ import { getCamera } from './main';
 export class Label {
     constructor(text) {
         this.text = text;
-        this.textMesh = makeText(18, 'center', 'center', this.text, 0, 0, 0);
+        this.textMesh = makeText(14, 'center', 'center', this.text, 0, 0, 0);
+        this.rotationPos = 'angled';
     }
 
     setPos(x, y, z) {
@@ -14,7 +15,9 @@ export class Label {
 
     faceCamera() {
 		this.textMesh.quaternion.copy(getCamera().quaternion);
-
+        if (this.rotationPos == 'angled') {
+            this.textMesh.rotation.z = Math.PI / 4;
+        }
     }
 
     setScale() {
@@ -30,6 +33,18 @@ export class Label {
             this.textMesh.material.opacity = 1;
         }
         this.textMesh.material.needsUpdate = true;
+    }
+
+    rotateToAngledPos() {
+        if (this.rotationPos == 'normal') {
+            this.rotationPos = 'angled';
+        }
+    }
+
+    rotateToNormalPos() {
+        if (this.rotationPos == 'angled') {
+            this.rotationPos = 'normal';
+        }
     }
 
     isOverlapping(other) {

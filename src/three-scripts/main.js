@@ -98,4 +98,10 @@ function animate() {
     layeredGraph.updateLayerLabels();
     layeredGraph.updateIntegratedLayerOpacity();
     renderer.render(scene, camera);
+
+    if(controls.getPolarAngle() > 1.4) {
+        layeredGraph.rotateLabelsToAngledPos();
+    } else {
+        layeredGraph.rotateLabelsToNormalPos();
+    }
 }

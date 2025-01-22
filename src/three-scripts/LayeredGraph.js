@@ -90,6 +90,18 @@ export class LayeredGraph {
         });
     }
 
+    rotateLabelsToNormalPos() {
+        this.layers.forEach((layer, name) => {
+            layer.rotateLabelsToNormalPos();
+        });
+    }
+
+    rotateLabelsToAngledPos() {
+        this.layers.forEach((layer, name) => {
+            layer.rotateLabelsToAngledPos();
+        });
+    }
+
     removeLayer(dotName, checkedEdges) {
         this.layers.get(dotName).removeLayer();
         this.layers.delete(dotName);
@@ -195,6 +207,18 @@ class Layer {
             // }
         }
 	}
+
+    rotateLabelsToNormalPos() {
+        for (const [k, l] of Object.entries(this.labelTexts)) {
+            l.rotateToNormalPos();
+        }
+    }
+
+    rotateLabelsToAngledPos() {
+        for (const [k, l] of Object.entries(this.labelTexts)) {
+            l.rotateToAngledPos();
+        }
+    }
 
     updateDots() {
         for (const [k, p] of Object.entries(this.nodePoints)) {
